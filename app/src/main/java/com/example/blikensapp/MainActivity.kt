@@ -1,8 +1,10 @@
 package com.example.blikensapp
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -10,6 +12,8 @@ import com.android.volley.toolbox.Volley
 import com.example.blikensapp.databinding.ActivityMainBinding
 import org.json.JSONObject
 import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -19,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     val accessToken = "r392jnfv2-almf92nww1-ld:fwfa"
 
     val url = "http://192.168.1.45:8080/api/blik/"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
+
 
     private fun getDataFromApi(url: String, accessToken: String) {
         val queue = Volley.newRequestQueue(this)
@@ -71,15 +77,23 @@ class MainActivity : AppCompatActivity() {
         queue.add(stringRequest)
     }
 
-    fun getDate(x:Int):String {
+    fun getDate(min:Int):String {
         val now = Date()
         val c: Calendar = Calendar.getInstance()
         c.setTime(now)
-        c.add(Calendar.HOUR,1)
-        c.add(Calendar.MINUTE, x)
+        c.add(Calendar.MINUTE, min)
         val later: Date = c.getTime()
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+        Log.d("DATE",sdf.format(later))
         return sdf.format(later)
     }
+//@RequiresApi(Build.VERSION_CODES.O)
+//fun getDateUTC(minutes: Int): String {
+//        val now = OffsetDateTime.now()
+//        val later = now.plusMinutes(minutes.toLong())
+//        val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+//        Log.d("DATE",later.format(formatter))
+//        return later.format(formatter)
+//    }
 
 }
